@@ -41,3 +41,13 @@ async def process_json(request: Request):
         return {"received_json": json_data}
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid JSON data")
+    
+
+@app.post("/director_attendance")
+async def process_json(request: Request):
+    try:
+        json_data = await request.json()
+        db.insert_class_out(json_data['tid'],json_data['current_time'])
+        return {"received_json": json_data}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Invalid JSON data")
