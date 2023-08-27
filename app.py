@@ -18,6 +18,7 @@ def read_root():
 def read_sessions():
     return JSONResponse(content=db.getTimeTable())
 
-@app.get("/classNotHeld/{ID}")
+@app.post("/classNotHeld/{ID}")
 async def class_not_held(ID: int):
-     print(ID)
+     db.insert_class_not_held(ID)
+     return {"message": "success"}
