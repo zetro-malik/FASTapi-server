@@ -63,7 +63,6 @@ def insert_class_out(tid,startime, remarks):
     conn.commit()
 
 def insert_class_out(tid, endtime):
-    try:
         cursor = conn.cursor()
         update_query = """
             UPDATE Attendance
@@ -73,11 +72,25 @@ def insert_class_out(tid, endtime):
         cursor.execute(update_query, (endtime, tid))
         conn.commit()
         print(f"Time out recorded for TID {tid}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        conn.rollback()
-    finally:
-        conn.close()
+
+
+def getAttendanceData():
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Attendance")
+    data = []
+    for row in cursor:
+        json = {
+            "ID": row[0],
+            "TID": row[1],
+            "Day": row[2],
+            "Date": row[3],
+            "TimeIn": row[4],
+            "TimeOut": row[5]
+        }
+        data.append(json)
+    return data
+
+
 
 
 if __name__ == "__main__":
