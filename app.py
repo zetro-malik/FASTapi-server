@@ -1,5 +1,5 @@
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi import FastAPI
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import JSONResponse
@@ -22,3 +22,12 @@ def read_sessions():
 async def class_not_held(ID: int):
      db.insert_class_not_held(ID)
      return {"message": "success"}
+
+@app.post("/insert_timein")
+async def process_json(request: Request):
+    try:
+        json_data = await request.json()
+        db.insert_class_in(json_data['tid'],json_data['current_time'],json_data['remarks'])
+        return {"received_json": json_data}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Invalid JSON data")

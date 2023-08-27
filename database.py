@@ -40,7 +40,16 @@ def insert_class_not_held(tid):
     cursor.execute(insert_query, values)
 
     conn.commit()
-    conn.close()
+
+def insert_class_in(tid,startime, remarks):
+    current_day = datetime.datetime.now().strftime('%a')
+    cursor = conn.cursor()
+
+    insert_query = "INSERT INTO Attendance (TID, Day, Date, TimeIn, TimeOut,remarks) VALUES (?, ?, ?, ?, NULL,?)"
+    values = (tid, current_day, datetime.date.today(),startime,remarks)
+    cursor.execute(insert_query, values)
+
+    conn.commit()
 
 
 if __name__ == "__main__":
