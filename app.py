@@ -5,6 +5,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, Depends
 from datetime import time
+import database as db
 
 app = FastAPI()
 
@@ -36,4 +37,4 @@ def read_root():
 
 @app.get("/sessions")
 def read_sessions():
-    return JSONResponse(content=data_list)
+    return JSONResponse(content=db.getTimeTable())

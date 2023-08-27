@@ -29,3 +29,4 @@ def getTimeTable():
         }
         data.append(json)
     return data
+
