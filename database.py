@@ -51,6 +51,34 @@ def insert_class_in(tid,startime, remarks):
 
     conn.commit()
 
+    
+def insert_class_out(tid,startime, remarks):
+    current_day = datetime.datetime.now().strftime('%a')
+    cursor = conn.cursor()
+
+    insert_query = "INSERT INTO Attendance (TID, Day, Date, TimeIn, TimeOut,remarks) VALUES (?, ?, ?, ?, NULL,?)"
+    values = (tid, current_day, datetime.date.today(),startime,remarks)
+    cursor.execute(insert_query, values)
+
+    conn.commit()
+
+def insert_class_out(tid, endtime):
+    try:
+        cursor = conn.cursor()
+        update_query = """
+            UPDATE Attendance
+            SET TimeOut = ?
+            WHERE TID = ?
+        """
+        cursor.execute(update_query, (endtime, tid))
+        conn.commit()
+        print(f"Time out recorded for TID {tid}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        conn.rollback()
+    finally:
+        conn.close()
+
 
 if __name__ == "__main__":
     insert_class_not_held(1)
