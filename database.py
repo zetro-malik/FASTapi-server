@@ -25,7 +25,8 @@ def getTimeTable():
             "CourseCode": row[6],
             "TeacherName": row[7],
             "Venue": row[8],
-            "Semester": row[9]
+            "Semester": row[9],
+            "Floor": row[10]
         }
         data.append(json)
     return data
