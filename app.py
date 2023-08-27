@@ -17,3 +17,7 @@ def read_root():
 @app.get("/sessions")
 def read_sessions():
     return JSONResponse(content=db.getTimeTable())
+
+@app.get("/classNotHeld/{ID}")
+async def class_not_held(ID: int):
+     print(ID)
