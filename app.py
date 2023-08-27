@@ -43,7 +43,7 @@ async def process_json(request: Request):
         raise HTTPException(status_code=400, detail="Invalid JSON data")
     
 
-@app.post("/director_attendance")
+@app.get("/director_attendance")
 async def process_json(request: Request):
     try:
         return JSONResponse(content=db.getAttendanceData())
