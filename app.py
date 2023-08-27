@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, Depends
+from datetime import time
 
 app = FastAPI()
 
@@ -11,13 +12,22 @@ data_list = []
 
 def load_data():
     global data_list
-    excel_file = 'FYP_CHR_Data.xlsx'  # Replace with the actual path of your Excel file
-    df = pd.read_excel(excel_file)
-    data_list = df.to_dict(orient='records')
+    
+    data = pd.read_excel("FYP_CHR_Data.xlsx")
+
+    data["Start Time"] = data["Start Time"].apply(lambda x: x.strftime('%H:%M') if isinstance(x, time) else x)
+    data["End Time"] = data["End Time"].apply(lambda x: x.strftime('%H:%M') if isinstance(x, time) else x)
+
+    data = data.loc[:, ~data.columns.str.startswith('Unnamed')]
+    data = data[~data.apply(lambda row: "nan" in row.values, axis=1)]   
+
+    
+    data_list = data.to_dict(orient="records")
 
 @app.on_event("startup")
 async def startup_event():
     load_data()
+    print(data_list)
     print("Data loaded successfully on startup")
 
 @app.get("/")
@@ -26,4 +36,4 @@ def read_root():
 
 @app.get("/sessions")
 def read_sessions():
-    return data_list
+    return JSONResponse(content=data_list)
